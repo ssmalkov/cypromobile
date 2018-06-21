@@ -131,37 +131,3 @@ function U2Gtime(unixtime) {
       return 0;
     }
 }
-
-// async function getCurrentValue(controllerID, signalID)
-// {
-//   const URL = 'http://51.15.249.97:8181/core/api/v1/data/' + controllerID + '/get/last/' + signalID;
-//   console.log(URL);
-
-//   var currentData = {
-//     time: null,
-//     value: 'нет данных',
-//   }
-
-//   try {
-
-//     let response = await fetch(URL);
-    
-//     try {
-//         let json = await response.json();
-//         if (json !== null)
-//       {
-//         currentData.time = json.updatetime;
-//         currentData.value = json.value;
-//       }
-
-//     } catch(err) {
-//         console.log('Could not pars JSON', err);
-//     }
-
-//     //console.log(currentData);
-//     return currentData;
-//     }
-//     catch(err) {
-//         console.log('CurrentValue Fetch Error :-S', URL, err);
-//     }
-// }
