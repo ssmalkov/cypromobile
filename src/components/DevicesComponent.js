@@ -42,8 +42,8 @@ export default class DevicesComponent extends Component {
             renderItem={({item}) =>
             <View style={styles.flatview}>
               <Text style={styles.name}>{item.humanName}</Text>
-              <Text style={styles.important}>{item.plase}</Text>
-              <Text style={styles.notImportant}>группа: {item.groups[0]}</Text>
+              <Text style={styles.important}>{item.place}</Text>
+              <Text style={styles.important}>группа: {item.groups[0]}</Text>
               <Text style={styles.important}>получено в: {item.lastDataEntryTime}</Text>
               <View style={styles.data}>
               <TouchableHighlight
