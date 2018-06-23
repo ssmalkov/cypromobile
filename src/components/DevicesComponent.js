@@ -36,26 +36,15 @@ export default class DevicesComponent extends Component {
     render() {
       return (
         <View style={styles.container} >
-          {/* <Text style={styles.h2text}>
-            Устройства
-          </Text> */}
             <FlatList
             data={this.state.devices}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) =>
             <View style={styles.flatview}>
-              <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.givenName}>{item.givenName}</Text>
-              <Text style={styles.notImportant}>Идентификатор {item.id}</Text>
-              <Text style={styles.notImportant}>Название {item.name}</Text>
-              <Text style={styles.notImportant}>Тип устройства {item.vendorString}</Text>
-              <Text style={styles.notImportant}>Название датчика {item.deviceTypeString}</Text>
-              {/* <Text style={styles.notImportant}>Последнее получение данных {item.lastReceived}</Text>
-              <Text style={styles.notImportant}>Последняя отправка данных {item.lastReceived}</Text>
-              <Text style={styles.notImportant}>isFailed {item.Сломан}</Text>
-              <Text style={styles.notImportant}>Последнее изменение настроек {item.modificationTime}</Text>
-              <Text style={styles.notImportant}>Доступные команды {item.commandClasses}</Text> */}
-              <Text style={styles.notImportant}>получено в: {item.lastDataEntryTime}</Text>
+              <Text style={styles.name}>{item.humanName}</Text>
+              <Text style={styles.important}>{item.plase}</Text>
+              <Text style={styles.notImportant}>группа: {item.groups[0]}</Text>
+              <Text style={styles.important}>получено в: {item.lastDataEntryTime}</Text>
               <View style={styles.data}>
               <TouchableHighlight
                 style = {styles.button}
@@ -70,23 +59,6 @@ export default class DevicesComponent extends Component {
               
             </View>
               {/* <Text style={styles.text}>Доступно управление {item.isManagable}</Text> */}
-
-
-{/* id: 'Идентификатор',
-      name: 'Название',
-      givenName: 'Псевдоним',
-      vendorString: 'Тип устройства',
-      deviceTypeString: 'Название датчика',
-      probeTitle: 'Название датчика',
-      lastReceived: 'Последнее получение данных',
-      lastSend: 'Последняя отправка данных',
-      isFailed: 'Сломан',
-      modificationTime: 'Последнее изменение настроек',
-      commandClasses: 'Доступные команды',
-      lastDataEntryTime: 'Последнее значение получено',
-      lastDataEntryValue: 'Последнее значение',
-      isManagable: 'Доступно управление', */}
-
             </View>
             }
             keyExtractor={item => item.givenName}
@@ -119,7 +91,8 @@ export default class DevicesComponent extends Component {
     },
     name: {
       fontFamily: 'Verdana',
-      fontSize: 18
+      color: 'green',
+      fontSize: 24
     },
     givenName: {
       color: 'green'

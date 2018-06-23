@@ -2,6 +2,7 @@
 'use strinct'
 import FetchDeviceData from './FetchDeviceData';
 import config from '../config';
+import devicesExtraData from '../data/Devices';
 
 export default {
     async getDevicesInfo() {
@@ -27,21 +28,40 @@ export default {
       const controllerApiKey = 'e8639832111cffa939ed53e765ecb17d';
       const URL = 'http://' + config.server + ':' + config.port + '/core/api/v1/device/' + controllerApiKey + '/get/all';
 
+      //var now = Date.now();
+      var now = new Date ();
+      var now1 = new Date ();
+
         try {
 
                 let response = await fetch(URL);
                 let json = await response.json();
                 let rawDevices = await _removeFakeDevices(json);
                 let devices = await _makeFormatedDevices(rawDevices);
+                devices = addExtraData(devices);
+                devices = devices
+                  .filter(p => !p.groups.includes('system'))
+                  .sort(function(a, b) { return a.order - b.order;})
+                  ;
 
-                for (var i = rawDevices.length - 1; i >= 0; i--)
+                for (var i = devices.length - 1; i >= 0; i--)
                 {
                     let currentValue = await FetchDeviceData.getCurrentValue(controllerApiKey, devices[i].name);
-                    devices[i].lastDataEntryTime = U2Gtime(currentValue.time);
+
+                    if (currentValue.time * 1000 < now.setHours(now.getHours() - 12))
+                    {
+
+                      devices[i].lastDataEntryTime = U2Gtime(currentValue.time) + ' Данные устарели!';
+
+                    } else {
+
+                      devices[i].lastDataEntryTime = U2Gtime(currentValue.time);
+
+                    }
+
                     devices[i].lastDataEntryValue = currentValue.value;
                 }
 
-                //console.log(devices);
                 return devices;
 
             }
@@ -77,7 +97,7 @@ function _removeFakeDevices(devices)
 
 function _makeFormatedDevices(rawDevices)
 {
-    var devices = []
+    let devices = []
     for (var i = rawDevices.length - 1; i >= 0; i--) 
     {
         devices.push(
@@ -130,4 +150,28 @@ function U2Gtime(unixtime) {
     {
       return 0;
     }
+}
+
+function addExtraData(devicesToImprove) {
+
+  if (devicesToImprove != null) {
+
+    for (var i = 0; i < devicesToImprove.length; i++){
+
+      const extraData = devicesExtraData.find(d => d.name === devicesToImprove[i].name);
+      devicesToImprove[i].parentDeviceId = extraData.parentDeviceId;
+      devicesToImprove[i].parentDeviceType = extraData.parentDeviceType;
+      devicesToImprove[i].probeType = extraData.probeType;
+      devicesToImprove[i].humanName = extraData.humanName;
+      devicesToImprove[i].place = extraData.place;
+      devicesToImprove[i].order = extraData.order;
+      devicesToImprove[i].groups = extraData.groups;
+      devicesToImprove[i].parentDeviceType = extraData.parentDeviceType;
+
+    }
+
+  }
+
+  return devicesToImprove;
+
 }

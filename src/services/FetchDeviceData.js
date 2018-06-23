@@ -22,8 +22,6 @@ export default {
             value: 'NO DATA',
         }
 
-        console.log( currentData );
-
         try {
 
             let response = await fetch(URL);
@@ -46,7 +44,6 @@ export default {
 
             }
 
-            console.log(currentData);
             return currentData;
 
         } catch(err) {
