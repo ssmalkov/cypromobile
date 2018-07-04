@@ -1,6 +1,6 @@
- // App.js
+// App.js
 
-'use strinct'
+'use strict';
 import React from 'react';
 import { StyleSheet, Text, View, NavigatorIOS } from 'react-native';
 import GetDataComponent from './src/components/GetDataComponent';

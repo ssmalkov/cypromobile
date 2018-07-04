@@ -1,5 +1,5 @@
 // FetchDeviceData.js
-'use strinct'
+'use strict';
 import config from '../config';
 
 export default {
@@ -17,7 +17,7 @@ export default {
         
         const URL = 'http://' + config.server + ':' + config.port + '/core/api/v1/data/' + controllerApiKey + '/get/last/' + deviceID;
 
-        var currentData = {
+        const currentData = {
             time: null,
             value: 'NO DATA',
         }
@@ -25,30 +25,16 @@ export default {
         try {
 
             let response = await fetch(URL);
-            
-            try {
+            let json = response && await response.json();
 
-                let json = await response.json();
-                if (json !== null && json.updatetime !== undefined)
-
-            {
-
-                currentData.time = json.updatetime;
-                currentData.value = json.value;
-
-            }
-
-            } catch(err) {
-
-                console.log('Could not pars JSON', err);
-
-            }
-
-            return currentData;
+            currentData.time = json && json.updatetime || currentData.time;
+            currentData.value = json && json.value || currentData.value;
 
         } catch(err) {
-            console.log('CurrentValue Fetch Error :-S', URL, err);
+            console.log('CurrentValue Fetch Error :', URL, err);
         }
+
+        return currentData;
 
     }
 

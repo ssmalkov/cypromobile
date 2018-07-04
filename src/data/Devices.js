@@ -5,7 +5,7 @@ module.exports = Object.freeze([
 		parentDeviceId: "5",
 		parentDeviceType: "MultySensor",
 		probeType: "Button",
-		humanName: "Что за удаленная кнопка?",
+		humanName: "Кнопка",
 		place: "Входная дверь",
 		order: 0,
 		groups: ['system']
@@ -148,10 +148,10 @@ module.exports = Object.freeze([
 		parentDeviceId: "9",
 		parentDeviceType: "Water",
 		probeType: "Water",
-		humanName: "Вода - ЧТО за ВОДА, Это протечка?",
+		humanName: "Протечка",
 		place: "Санузел",
 		order: 0,
-		groups: ['security','water']
+		groups: ['system','security','water']
 	},
 	{
 		name: "ZWayVDev_zway_9-0-113-5-2-A",
@@ -159,10 +159,10 @@ module.exports = Object.freeze([
 		parentDeviceId: "9",
 		parentDeviceType: "WaterAlarm",
 		probeType: "WaterAlarm",
-		humanName: "Протечка",
+		humanName: "Протечка, звуковой сигнал",
 		place: "Санузел",
 		order: 6,
-		groups: ['security','water']
+		groups: ['system','security','water']
 	},
 	{
 		name: "ZWayVDev_zway_9-0-128",

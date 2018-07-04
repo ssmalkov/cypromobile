@@ -12,6 +12,9 @@
 .env.test.local
 .env.production.local
 
+# VSCode
+./vscode
+
 # cypro back-end
 /src/config.js
 

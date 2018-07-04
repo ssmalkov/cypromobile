@@ -1,41 +1,32 @@
 // GetDataComponent.js
 
-'use strinct'
+'use strinct';
 import React, { Component } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   TouchableHighlight
 } from 'react-native';
-import { getControllersInfo } from '../services/FetchControllers';
-//import { getDevicesInfo } from '../services/FetchDevices';
-import ControllersComponent from './ControllersComponent';
-import DevicesComponent from './DevicesComponent';
 
+import * as Services from '../services';
+import * as Components from './';
 
 export default class GetDataComponent extends Component {
   constructor(props) {
       super(props);
       this.state = {
-        //username: '',
         error: false
       }
-//      this.handleChange = this.handleChange.bind(this);
       this.handleControllersRequest = this.handleControllersRequest.bind(this);
       this.handleDevicesRequest = this.handleDevicesRequest.bind(this);
     }
-    // handleChange(e) {
-    //   this.setState({
-    //     username: e.nativeEvent.text
-    //   });
-    // }
+
     handleControllersRequest() {
-      getControllersInfo()
+      Services.FetchControllers.getControllersInfo()
           .then((response) => {
               console.log(response);
-              if(response.message === 'Not Found') {
+              if(!response) {
                 this.setState({
                     error: 'Неверный запрос или контроллер!'
                 });
@@ -44,11 +35,10 @@ export default class GetDataComponent extends Component {
               this.props.navigator.push({
                 title: 'Зарегистрированные контроллеры',
                 passProps: {controllersInfo: response},
-                component: ControllersComponent 
+                component: Components.ControllersComponent 
               });
               this.setState({
                 error: false,
-                //username: ''
               })
             }
         });
@@ -57,29 +47,8 @@ export default class GetDataComponent extends Component {
     handleDevicesRequest() {
       this.props.navigator.push({
                   title: 'Зарегистрированные устройства',
-                  //passProps: {devicesInfo: response},
-                  component: DevicesComponent 
+                  component: Components.DevicesComponent 
                 });
-      // getDevicesInfo()
-      //     .then((response) => {
-      //         //console.log(response);
-      //         if(response.message === 'Not Found') {
-      //           this.setState({
-      //               error: 'Неверный запрос или устройство!'
-      //           });
-      //         }
-      //       else {
-      //         this.props.navigator.push({
-      //           title: 'Зарегестрированные устройства',
-      //           passProps: {devicesInfo: response},
-      //           component: DevicesComponent 
-      //         });
-      //         this.setState({
-      //           error: false,
-      //           //username: ''
-      //         })
-      //       }
-      //   });
     }
 
   render() {
@@ -93,10 +62,6 @@ export default class GetDataComponent extends Component {
     return (
       <View style={styles.main}>
         <Text style={styles.title}>Кипро</Text>
-        {/* <TextInput
-              style={styles.searchInput}
-              onChange={this.handleChange}
-            /> */}
         <TouchableHighlight
                 style = {styles.button}
                 underlayColor= "white"

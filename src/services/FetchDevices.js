@@ -1,5 +1,5 @@
 // FetchDevices.js
-'use strinct'
+'use strict';
 import FetchDeviceData from './FetchDeviceData';
 import config from '../config';
 import devicesExtraData from '../data/Devices';
@@ -28,38 +28,32 @@ export default {
       const controllerApiKey = 'e8639832111cffa939ed53e765ecb17d';
       const URL = 'http://' + config.server + ':' + config.port + '/core/api/v1/device/' + controllerApiKey + '/get/all';
 
-      //var now = Date.now();
-      var now = new Date ();
-      var now1 = new Date ();
-
         try {
 
                 let response = await fetch(URL);
-                let json = await response.json();
-                let rawDevices = await _removeFakeDevices(json);
-                let devices = await _makeFormatedDevices(rawDevices);
-                devices = addExtraData(devices);
-                devices = devices
+                let json = response && await response.json();
+
+                let devices = json && await _removeFakeDevices(json);
+                devices = devices && await _makeFormatedDevices(devices);
+                devices = devices && addExtraData(devices);
+                devices = devices && devices
                   .filter(p => !p.groups.includes('system'))
                   .sort(function(a, b) { return a.order - b.order;})
                   ;
 
-                for (var i = devices.length - 1; i >= 0; i--)
+                for (let i = devices.length - 1; i >= 0; i--)
                 {
+
                     let currentValue = await FetchDeviceData.getCurrentValue(controllerApiKey, devices[i].name);
 
-                    if (currentValue.time * 1000 < now.setHours(now.getHours() - 12))
-                    {
-
+                    if (_checkIfOutdated(currentValue.time)){
                       devices[i].lastDataEntryTime = U2Gtime(currentValue.time) + ' Данные устарели!';
-
                     } else {
-
                       devices[i].lastDataEntryTime = U2Gtime(currentValue.time);
-
                     }
 
                     devices[i].lastDataEntryValue = currentValue.value;
+
                 }
 
                 return devices;
@@ -75,73 +69,54 @@ export default {
 function _removeFakeDevices(devices)
 {
             //Убираем пустые системные устройства
-            for (var i = devices.length - 1; i >= 0; i--) 
-            {
-              if(devices[i].name === null) 
-              {
-                devices.splice(i, 1);
-              }
-            }
-            
-            //Убираем не ZWayVDev_zway_ устройства
-            for (var i = devices.length - 1; i >= 0; i--) 
-            {
-              if(devices[i].name.indexOf('ZWayVDev_zway_') === -1) 
-              {
-                devices.splice(i, 1);
-              }
-            }
+            const nonFakeAttribute = 'WayVDev_zway_';
 
-            return devices;
+            return devices.filter(d => d.name && d.name.includes(nonFakeAttribute));
+
 }
 
 function _makeFormatedDevices(rawDevices)
 {
-    let devices = []
-    for (var i = rawDevices.length - 1; i >= 0; i--) 
+
+    for (let i = rawDevices.length - 1; i >= 0; i--) 
     {
-        devices.push(
-            {
-              id: rawDevices[i].id,
-              name: rawDevices[i].name,
-              givenName: rawDevices[i].givenName,
-              vendorString: rawDevices[i].vendorString,
-              deviceTypeString: rawDevices[i].deviceTypeString,
-              probeTitle: rawDevices[i].probeTitle,
-              lastReceived: rawDevices[i].lastReceived,
-              lastSend: rawDevices[i].lastSend,
-              isFailed: rawDevices[i].isFailed,
-              modificationTime: U2Gtime(rawDevices[i].modificationTime),
-              commandClasses: rawDevices[i].commandClasses,
-              lastDataEntryTime: '',
-              lastDataEntryValue: '',
-              isManagable: checkIfDeviceIsManagable(rawDevices[i]),
-            })
+      rawDevices[i].modificationTime = U2Gtime(rawDevices[i].modificationTime);
+      rawDevices[i].lastDataEntryTime = '';
+      rawDevices[i].lastDataEntryValue = '';
+      rawDevices[i].isManagable = checkIfDeviceIsManagable(rawDevices[i]);
     }
-    return devices;
+
+    return rawDevices;
 }
 
 function checkIfDeviceIsManagable(device)
 {
-    
-  var deviceIsManagable = false;
   //проверка на managable
     
-  if (device.name === 'ZWayVDev_zway_12-0-37')
-  {
-    deviceIsManagable = true;
-  }
+    let deviceIsManagable = device.name === 'ZWayVDev_zway_12-0-37' ? true : false;
   
   return deviceIsManagable;
+}
+
+function _checkIfOutdated(unixTime)
+{
+
+  let now = new Date ();
+  const outdateHours = 12;
+
+  unixTime * 1000;
+
+  return unixTime || unixTime < now.setHours(now.getHours() - outdateHours) ? true : false;
+
 }
 
 function U2Gtime(unixtime) {
     if (unixtime != null)
     {
-      var newDate = new Date( );
+      let newDate = new Date( );
       newDate.setTime(unixtime * 1000);
       //dateString = newDate.toUTCString( );
-      var dateString = newDate.toISOString().
+      let dateString = newDate.toISOString().
       replace(/T/, ' ').      // replace T with a space
       replace(/\..+/, '');     // delete the dot and everything after
       return dateString
@@ -156,7 +131,7 @@ function addExtraData(devicesToImprove) {
 
   if (devicesToImprove != null) {
 
-    for (var i = 0; i < devicesToImprove.length; i++){
+    for (let i = 0; i < devicesToImprove.length; i++){
 
       const extraData = devicesExtraData.find(d => d.name === devicesToImprove[i].name);
       devicesToImprove[i].parentDeviceId = extraData.parentDeviceId;

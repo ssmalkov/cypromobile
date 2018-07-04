@@ -40,9 +40,12 @@ export default class DevicesComponent extends Component {
             data={this.state.devices}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) =>
-            <View style={styles.flatview}>
+            <View style={!item.isManagable ? styles.flatview : styles.flatviewManagable}>
               <Text style={styles.name}>{item.humanName}</Text>
               <Text style={styles.important}>{item.place}</Text>
+              {item.isManagable ? 
+                 <Text style={styles.important}>Доступно управление</Text> : ''
+              }
               <Text style={styles.important}>группа: {item.groups[0]}</Text>
               <Text style={styles.important}>получено в: {item.lastDataEntryTime}</Text>
               <View style={styles.data}>
@@ -88,6 +91,12 @@ export default class DevicesComponent extends Component {
       padding: 5,
       borderRadius: 2,
       backgroundColor: 'white'
+    },
+    flatviewManagable: {
+      justifyContent: 'center',
+      padding: 5,
+      borderRadius: 2,
+      backgroundColor: 'yellow'
     },
     name: {
       fontFamily: 'Verdana',
