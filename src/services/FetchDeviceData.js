@@ -19,7 +19,7 @@ export default {
 
         const currentData = {
             time: null,
-            value: 'NO DATA',
+            value: 'no data',
         }
 
         try {

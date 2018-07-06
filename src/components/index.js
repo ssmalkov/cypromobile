@@ -4,3 +4,4 @@
 export { default as ControllersComponent } from './ControllersComponent';
 export { default as DevicesComponent } from './DevicesComponent';
 export { default as GetDataComponent } from './GetDataComponent';
+export { default as DevicesDataComponent } from './DevicesDataComponent';

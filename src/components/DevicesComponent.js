@@ -1,26 +1,16 @@
 // DashboardComponent.js
 
-'use strict'
+'use strict';
 import React, { Component } from 'react';
 import {
   Text,
   View,
+  Image,
   StyleSheet,
   FlatList,
   TouchableHighlight
 } from 'react-native';
 import ajax from '../services/FetchDevices';
-
-// export default class DevicesComponent extends Component {
-//     render() {
-//       return (
-//         <View style={styles.main}>
-//           <Text style={styles.title}>Устройства</Text>
-//         </View>
-//       )
-//     }
-//   }
-
 
 export default class DevicesComponent extends Component {
 
@@ -35,105 +25,70 @@ export default class DevicesComponent extends Component {
   
     render() {
       return (
-        <View style={styles.container} >
+        
+          <View>
             <FlatList
-            data={this.state.devices}
-            showsVerticalScrollIndicator={false}
-            renderItem={({item}) =>
-            <View style={!item.isManagable ? styles.flatview : styles.flatviewManagable}>
-              <Text style={styles.name}>{item.humanName}</Text>
-              <Text style={styles.important}>{item.place}</Text>
-              {item.isManagable ? 
-                 <Text style={styles.important}>Доступно управление</Text> : ''
+              data={this.state.devices}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) =>
+              <TouchableHighlight underlayColor='#dddddd'>
+                <View>
+                  <View style={styles.rowContainer} >
+                    <Image style={styles.thumb} source={require('./../../resources/icons/loading.png')}></Image>
+                    <View style={styles.textContainer}>
+                      <Text style={styles.name} numberOfLines={1}>{item.humanName}</Text>
+                      <Text style={styles.text}>{item.place}</Text>
+                      {item.isManagable ? <Text style={styles.text}>Доступно управление</Text> : ''}
+                      <Text style={styles.text}>группа: {item.groups[0]}</Text>
+                      <Text style={styles.text}>получено в: {item.lastDataEntryTime}</Text>
+                    </View>
+                    <Text style={styles.probeValue}>{item.lastDataEntryValue}</Text>
+                  </View>
+                  <View style={styles.separator} />
+                </View>
+                </TouchableHighlight>
               }
-              <Text style={styles.important}>группа: {item.groups[0]}</Text>
-              <Text style={styles.important}>получено в: {item.lastDataEntryTime}</Text>
-              <View style={styles.data}>
-              <TouchableHighlight
-                style = {styles.button}
-                underlayColor= "white"
-                //onPress = {this.handleDevicesRequest}
-              >
-              <Text
-                  style={styles.buttonText}>
-                  {item.lastDataEntryValue}
-              </Text>
-            </TouchableHighlight>
-              
-            </View>
-              {/* <Text style={styles.text}>Доступно управление {item.isManagable}</Text> */}
-            </View>
-            }
-            keyExtractor={item => item.givenName}
-          />
-        </View>
+              keyExtractor={item => item.givenName}
+            />
+          </View>
+        
       );
     }
   }
 
   const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      //padding: 30,
-      //marginTop: 45,
-      flexDirection: 'column',
-        justifyContent: 'center',
-        backgroundColor: '#2a8ab7'
+    rowContainer: {
+      flexDirection: 'row',
+      padding: 10
     },
-    h2text: {
-      marginTop: 10,
-      fontFamily: 'Helvetica',
-      fontSize: 36,
-      fontWeight: 'bold',
+    thumb: {
+      width: 80,
+      height: 80,
+      marginRight: 10
     },
-    flatview: {
-      justifyContent: 'center',
-      padding: 5,
-      borderRadius: 2,
-      backgroundColor: 'white'
+    textContainer: {
+      flex: 1
     },
-    flatviewManagable: {
-      justifyContent: 'center',
-      padding: 5,
-      borderRadius: 2,
-      backgroundColor: 'yellow'
+    separator: {
+      height: 1,
+      backgroundColor: '#dddddd'
     },
     name: {
-      fontFamily: 'Verdana',
-      color: 'green',
-      fontSize: 24
+      fontSize: 25,
+      fontWeight: 'bold',
+      color: '#48BBEC'
     },
     givenName: {
       color: 'green'
     },
-    notImportant: {
-        fontFamily: 'Verdana',
-        fontSize: 10
+    text: {
+        fontSize: 20,
+        color: '#656565'
     },
-    important: {
-        fontFamily: 'Verdana',
-        fontSize: 18
-    },
-    data: {
-        flex: 1,
-        //padding: 30,
-        //marginTop: 65,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        //backgroundColor: '#2a8ab7'
-    },
-    button: {
-      height: 30,
-      width: 100,
-      flexDirection: 'row',
-      backgroundColor:'grey',
-      borderColor: 'white',
-      borderWidth: 1,
-      borderRadius: 8,
-      marginBottom: 2,
-      marginTop: 2,
-      alignSelf: 'center',
-      justifyContent: 'center'
+    probeValue: {
+      fontSize: 25,
+      fontWeight: 'bold',
+      color: '#48BBEC'
     }
     
   });

@@ -25,7 +25,6 @@ export default class GetDataComponent extends Component {
     handleControllersRequest() {
       Services.FetchControllers.getControllersInfo()
           .then((response) => {
-              console.log(response);
               if(!response) {
                 this.setState({
                     error: 'Неверный запрос или контроллер!'
@@ -61,7 +60,7 @@ export default class GetDataComponent extends Component {
     );
     return (
       <View style={styles.main}>
-        <Text style={styles.title}>Кипро</Text>
+        <Text style={styles.title}>Кипро{__DEV__ ? '(dev mode)': ''}</Text>
         <TouchableHighlight
                 style = {styles.button}
                 underlayColor= "white"
