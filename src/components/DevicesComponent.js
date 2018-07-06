@@ -11,47 +11,77 @@ import {
   TouchableHighlight
 } from 'react-native';
 import ajax from '../services/FetchDevices';
+import * as Components from './';
 
-export default class DevicesComponent extends Component {
+class ListItem extends React.PureComponent {
+  _onPress = () => {
+    // console.log(this.props.index);
+    this.props.onPressItem(this.props.index);
+  }
+
+  render() {
+    const item = this.props.item;
+    return (
+      <TouchableHighlight
+        onPress={this._onPress}
+        underlayColor='#dddddd'>
+        <View>
+          <View style={styles.rowContainer} >
+            <Image style={styles.thumb} source={require('./../../resources/icons/loading.png')}></Image>
+            <View style={styles.textContainer}>
+              <Text style={styles.name} numberOfLines={1}>{item.humanName}</Text>
+              <Text style={styles.text}>{item.place}</Text>
+              {item.isManagable ? <Text style={styles.text}>Доступно управление</Text> : ''}
+              <Text style={styles.text}>группа: {item.groups[0]}</Text>
+              <Text style={styles.text}>получено в: {item.lastDataEntryTime}</Text>
+            </View>
+            <Text style={styles.probeValue}>{item.lastDataEntryValue}</Text>
+          </View>
+          <View style={styles.separator} />
+        </View>
+      </TouchableHighlight>
+    );
+  }
+}
+
+  export default class DevicesComponent extends Component<{}> {
 
     state = {
       devices: []
     }
-  
+
     async componentDidMount() {
       const devices = await ajax.getDevicesInfo();
-      this.setState({devices});
+      this.setState({ devices });
     }
+
+    // _keyExtractor = (item, index) => index;
+    _keyExtractor = (item, index) => item.id;
+  
+    _renderItem = ({item, index}) => (
+      <ListItem
+        item={item}
+        index={index}
+        onPressItem={this._onPressItem}
+      />
+    );
+  
+    _onPressItem = (index) => {
+      this.props.navigator.push({
+        title: this.state.devices[index].humanName,
+        component: Components.DevicesDataComponent,
+        passProps: {devicesData: this.state.devices[index]}
+      });
+    };
   
     render() {
       return (
-        
-          <View>
-            <FlatList
-              data={this.state.devices}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) =>
-              <TouchableHighlight underlayColor='#dddddd'>
-                <View>
-                  <View style={styles.rowContainer} >
-                    <Image style={styles.thumb} source={require('./../../resources/icons/loading.png')}></Image>
-                    <View style={styles.textContainer}>
-                      <Text style={styles.name} numberOfLines={1}>{item.humanName}</Text>
-                      <Text style={styles.text}>{item.place}</Text>
-                      {item.isManagable ? <Text style={styles.text}>Доступно управление</Text> : ''}
-                      <Text style={styles.text}>группа: {item.groups[0]}</Text>
-                      <Text style={styles.text}>получено в: {item.lastDataEntryTime}</Text>
-                    </View>
-                    <Text style={styles.probeValue}>{item.lastDataEntryValue}</Text>
-                  </View>
-                  <View style={styles.separator} />
-                </View>
-                </TouchableHighlight>
-              }
-              keyExtractor={item => item.givenName}
-            />
-          </View>
-        
+        <FlatList
+          data={this.state.devices}
+          keyExtractor={this._keyExtractor}
+          renderItem={this._renderItem}
+          showsVerticalScrollIndicator={false}
+        />
       );
     }
   }
