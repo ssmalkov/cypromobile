@@ -3,6 +3,7 @@
 import FetchDeviceData from './FetchDeviceData';
 import config from '../config';
 import devicesExtraData from '../data/Devices';
+import Helpers from './Helpers';
 
 export default {
     async getDevicesInfo() {
@@ -47,9 +48,9 @@ export default {
                     let currentValue = await FetchDeviceData.getCurrentValue(controllerApiKey, devices[i].name);
 
                     if (_checkIfOutdated(currentValue.time)){
-                      devices[i].lastDataEntryTime = U2Gtime(currentValue.time) + ' Данные устарели!';
+                      devices[i].lastDataEntryTime = Helpers.U2Gtime(currentValue.time) + ' Данные устарели!';
                     } else {
-                      devices[i].lastDataEntryTime = U2Gtime(currentValue.time);
+                      devices[i].lastDataEntryTime = Helpers.U2Gtime(currentValue.time);
                     }
 
                     devices[i].lastDataEntryValue = currentValue.value;
@@ -80,7 +81,7 @@ function _makeFormatedDevices(rawDevices)
 
     for (let i = rawDevices.length - 1; i >= 0; i--) 
     {
-      rawDevices[i].modificationTime = U2Gtime(rawDevices[i].modificationTime);
+      rawDevices[i].modificationTime = Helpers.U2Gtime(rawDevices[i].modificationTime);
       rawDevices[i].lastDataEntryTime = '';
       rawDevices[i].lastDataEntryValue = '';
       rawDevices[i].isManagable = checkIfDeviceIsManagable(rawDevices[i]);
@@ -108,23 +109,6 @@ function _checkIfOutdated(unixTime)
 
   return unixTime || unixTime < now.setHours(now.getHours() - outdateHours) ? true : false;
 
-}
-
-function U2Gtime(unixtime) {
-    if (unixtime != null)
-    {
-      let newDate = new Date( );
-      newDate.setTime(unixtime * 1000);
-      //dateString = newDate.toUTCString( );
-      let dateString = newDate.toISOString().
-      replace(/T/, ' ').      // replace T with a space
-      replace(/\..+/, '');     // delete the dot and everything after
-      return dateString
-    }
-    else 
-    {
-      return 0;
-    }
 }
 
 function addExtraData(devicesToImprove) {

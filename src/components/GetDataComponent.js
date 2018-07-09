@@ -1,6 +1,6 @@
 // GetDataComponent.js
 
-'use strinct';
+'use strict';
 import React, { Component } from 'react';
 import {
   View,
@@ -95,23 +95,12 @@ const styles = StyleSheet.create({
     padding: 30,
     marginTop: 65,
     flexDirection: 'column',
-    //justifyContent: 'center',
     backgroundColor: '#2a8ab7'
   },
   title: {
     marginBottom: 20,
     fontSize: 25,
     textAlign: 'center'
-  // },
-  // searchInput: {
-  //   height: 50,
-  //   padding: 4,
-  //   marginRight: 5,
-  //   fontSize: 23,
-  //   borderWidth: 1,
-  //   borderColor: 'white',
-  //   borderRadius: 8,
-  //   color: 'white'
   },
   buttonText: {
     fontSize: 18,
