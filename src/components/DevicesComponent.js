@@ -14,8 +14,8 @@ import ajax from '../services/FetchDevices';
 import * as Components from './';
 
 class ListItem extends React.PureComponent {
+
   _onPress = () => {
-    // console.log(this.props.index);
     this.props.onPressItem(this.props.index);
   }
 
@@ -27,11 +27,18 @@ class ListItem extends React.PureComponent {
         underlayColor='#dddddd'>
         <View>
           <View style={styles.rowContainer} >
-            <Image style={styles.thumb} source={require('./../../resources/icons/loading.png')}></Image>
+            <Image style={styles.thumb} source={require('./../../resources/icons/loading.png')} />
             <View style={styles.textContainer}>
               <Text style={styles.name} numberOfLines={1}>{item.humanName}</Text>
               <Text style={styles.text}>{item.place}</Text>
-              {item.isManagable ? <Text style={styles.text}>Доступно управление</Text> : ''}
+
+              {
+                item.isManagable
+                  ? (<Text style={styles.text}>Доступно управление</Text>)
+                  : null
+              }
+
+              
               <Text style={styles.text}>группа: {item.groups[0]}</Text>
               <Text style={styles.text}>получено в: {item.lastDataEntryTime}</Text>
             </View>
@@ -46,6 +53,10 @@ class ListItem extends React.PureComponent {
 
   export default class DevicesComponent extends Component<{}> {
 
+    static navigationOptions = {
+      title: 'Сигналы'
+    }
+
     state = {
       devices: []
     }
@@ -55,7 +66,6 @@ class ListItem extends React.PureComponent {
       this.setState({ devices });
     }
 
-    // _keyExtractor = (item, index) => index;
     _keyExtractor = (item, index) => item.id;
   
     _renderItem = ({item, index}) => (
@@ -67,11 +77,13 @@ class ListItem extends React.PureComponent {
     );
   
     _onPressItem = (index) => {
-      this.props.navigator.push({
-        title: this.state.devices[index].humanName,
-        component: Components.DevicesDataComponent,
-        passProps: {devicesData: this.state.devices[index]}
-      });
+      this.props.navigation.push(
+        'ProbeData',
+        {
+          title: this.state.devices[index].humanName,
+          devicesData: this.state.devices[index],
+        }
+      );
     };
   
     render() {
@@ -92,8 +104,8 @@ class ListItem extends React.PureComponent {
       padding: 10
     },
     thumb: {
-      width: 80,
-      height: 80,
+      width: 40,
+      height: 40,
       marginRight: 10
     },
     textContainer: {

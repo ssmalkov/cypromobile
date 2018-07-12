@@ -8,30 +8,28 @@ import {
   Image,
   View,
   Text,
-  ScrollView,
   FlatList,
-  List,
 } from 'react-native';
 import ajax from '../services/FetchProbeHistory';
 import Helpers from '../services/Helpers';
 
 export default class DevicesDataComponent extends Component<{}> {
 
+  static navigationOptions = ({ navigation }) => ({
+    title: `${navigation.state.params.title}`,
+    });
+
   state = {
     probeHistory: []
   }
 
   async componentDidMount() {
-    const probeHistory = await ajax.getProbeHistory('e8639832111cffa939ed53e765ecb17d', this.props.devicesData.name);
+    const probeHistory = await ajax.getProbeHistory('e8639832111cffa939ed53e765ecb17d', this.props.navigation.state.params.devicesData.name);
     this.setState({ probeHistory });
   }
 
   render() {
     const probeHistory = this.state.probeHistory;
-    // let data = '';
-    // probeHistory.forEach(e => {
-    //   data = data + e.time + ' - ' + e.value + '\n';
-    // });
 
     return (
       <View style={styles.container}>
@@ -39,10 +37,10 @@ export default class DevicesDataComponent extends Component<{}> {
           <Image style={styles.image} source={require('./../../resources/icons/loading.png')} />
           <View style={styles.heading}>
             <View style={styles.probeName}>
-              <Text style={styles.probeNameText}>{this.props.devicesData.humanName}({probeHistory.length})</Text>
+              <Text style={styles.probeNameText}>{this.props.navigation.state.params.devicesData.humanName}({probeHistory.length})</Text>
             </View>
             <View style={styles.probeValue}>
-              <Text style={styles.probeValueText}>{this.props.devicesData.lastDataEntryValue}</Text>
+              <Text style={styles.probeValueText}>{this.props.navigation.state.params.devicesData.lastDataEntryValue}</Text>
             </View>
             {/* <View style={styles.separator}/> */}
           </View>
@@ -66,12 +64,11 @@ export default class DevicesDataComponent extends Component<{}> {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 65
   },
   heading: {
     backgroundColor: '#F8F8F8',
     flexDirection: 'row',
-    padding: 10,
+    //padding: 10,
   },
   separator: {
     height: 1,
@@ -79,7 +76,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 400,
-    height: 300,
+    height: 150,
   },
   probeName: {
     flex: 0.6,

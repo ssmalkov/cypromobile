@@ -22,6 +22,10 @@ export default class GetDataComponent extends Component {
       this.handleDevicesRequest = this.handleDevicesRequest.bind(this);
     }
 
+  static navigationOptions = {
+    header: null
+  }
+
     handleControllersRequest() {
       Services.FetchControllers.getControllersInfo()
           .then((response) => {
@@ -31,11 +35,10 @@ export default class GetDataComponent extends Component {
                 });
               }
             else {
-              this.props.navigator.push({
-                title: 'Зарегистрированные контроллеры',
-                passProps: {controllersInfo: response},
-                component: Components.ControllersComponent 
-              });
+              this.props.navigation.push(
+                'Controllers',
+                {controllersInfo: response}
+              );
               this.setState({
                 error: false,
               })
@@ -44,10 +47,7 @@ export default class GetDataComponent extends Component {
     }
 
     handleDevicesRequest() {
-      this.props.navigator.push({
-                  title: 'Зарегистрированные устройства',
-                  component: Components.DevicesComponent 
-                });
+      this.props.navigation.push('Probes');
     }
 
   render() {
@@ -80,7 +80,7 @@ export default class GetDataComponent extends Component {
               >
               <Text
                   style={styles.buttonText}>
-                  Устройства
+                  Сигналы
               </Text>
             </TouchableHighlight>
             {showErr}
@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     padding: 30,
-    marginTop: 65,
     flexDirection: 'column',
     backgroundColor: '#2a8ab7'
   },
