@@ -50,6 +50,11 @@ export default class GetDataComponent extends Component {
       this.props.navigation.push('Probes');
     }
 
+  // handlePushLocal = () => {
+  //   PushNotifications.localNotification();
+  // }
+
+
   render() {
     let showErr = (
       this.state.error ?
@@ -83,6 +88,18 @@ export default class GetDataComponent extends Component {
                   Сигналы
               </Text>
             </TouchableHighlight>
+            {showErr}
+
+            {/* <TouchableHighlight
+                style = {styles.button}
+                underlayColor= "white"
+                onPress = {this.handlePushLocal}
+              >
+              <Text
+                  style={styles.buttonText}>
+                  Push (локально)
+              </Text>
+            </TouchableHighlight> */}
             {showErr}
       </View>
     )

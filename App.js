@@ -7,9 +7,21 @@ import GetDataComponent from './src/components/GetDataComponent';
 import * as Components from './src/components';
 //import { createStackNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation';
+//import { PushNotifications } from './src/services';
+
+//import { Provider } from 'react-redux';
+//import store from './src/store';
+// const App = () => (
+//  <Provider store={store}>
+//    <AppContainer />
+//  </Provider>
+// );
 
 export default class App extends React.Component {
   render() {
+
+    //PushNotifications.configure();
+
     // return (
     //     <NavigatorIOS
     //       style={styles.container}
