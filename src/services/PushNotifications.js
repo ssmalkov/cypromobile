@@ -2,8 +2,8 @@
 'use strict';
 
 import React from 'react';
-import PushNotification from 'react-native-push-notification';
-//import { PushNotificationIOS } from 'react-native';
+//import PushNotification from 'react-native-push-notification';
+//import { PushNotificationIOS } from 'expo';
 
 const configure = () => {
  PushNotification.configure({
