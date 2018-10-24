@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import ajax from '../services/FetchProbeHistory';
 import Helpers from '../services/Helpers';
-//import { LineChart, Grid } from 'react-native-svg-charts';
+import { LineChart, Grid } from 'react-native-svg-charts';
 
 export default class DevicesDataComponent extends Component<{}> {
 
@@ -33,19 +33,23 @@ export default class DevicesDataComponent extends Component<{}> {
 
     const data = [ 50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80 ]
     const probeHistory = this.state.probeHistory;
+    const chartData = this.state.probeHistory.map((data) => {
+      return (data.value)
+    })
 
     return (
       <View style={styles.container}>
         <View>
-          <Image style={styles.image} source={require('./../../resources/icons/loading.png')} />
-          {/* <LineChart
+          {/* <Image style={styles.image} source={require('./../../resources/icons/loading.png')} /> */}
+          <LineChart
                 style={styles.image}
-                data={ data }
+                data={ chartData }
                 svg={{ stroke: 'rgb(134, 65, 244)' }}
                 contentInset={{ top: 20, bottom: 20 }}
             >
                 <Grid/>
-            </LineChart> */}
+            </LineChart>
+          {console.log(chartData)}
           <View style={styles.heading}>
             <View style={styles.probeName}>
               <Text style={styles.probeNameText}>{this.props.navigation.state.params.devicesData.humanName}({probeHistory.length})</Text>

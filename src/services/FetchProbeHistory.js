@@ -41,8 +41,32 @@ export default {
           console.log('CurrentValue Fetch Error :', URL, err);
       }
 
-      return probeHystory;
+      return _convertValuesToInt(probeHystory);
 
   }
+
+}
+
+function _convertValuesToInt(valuesFromProbes) {
+
+  let convertedToIntData = [];
+
+  for (let i = valuesFromProbes.length - 1; i >= 0; i--) {
+
+    switch (valuesFromProbes[i].value) {
+      case 'on':
+        valuesFromProbes[i].value = 1;
+        break;
+        case 'off':
+        valuesFromProbes[i].value = 0;
+        break;
+      default:
+        valuesFromProbes[i].value = parseInt(valuesFromProbes[i].value);
+        break;
+    }
+
+  }
+
+  return valuesFromProbes;
 
 }
