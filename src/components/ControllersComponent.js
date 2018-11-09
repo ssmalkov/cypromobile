@@ -1,49 +1,130 @@
-// DashboardComponent.js
+// ControllersComponent.js
 
 'use strict';
 import React, { Component } from 'react';
 import {
   Text,
   View,
+  Image,
   StyleSheet,
+  FlatList,
+  TouchableHighlight
 } from 'react-native';
+import ajax from '../services/FetchControllers';
+import * as Components from './';
 
-export default class ControllersComponent extends Component {
+class ListItem extends React.PureComponent {
 
-  static navigationOptions = {
-    title: '№1 (Москва)'
+  _onPress = () => {
+    this.props.onPressItem(this.props.index);
   }
 
   render() {
+    const item = this.props.item;
     return (
-      <View style={styles.main}>
-        <Text style={styles.title}>Учетные данные</Text>
-        <Text style={styles.text}>Идентификатор: {this.props.navigation.state.params.controllersInfo[0].apikey}</Text>
-        <Text style={styles.text}>Дата региcтрации: {this.props.navigation.state.params.controllersInfo[0].egistrationtime}</Text>
-        <Text style={styles.text}>Логин: {this.props.navigation.state.params.controllersInfo[0].login}</Text>
-        <Text style={styles.text}>Пароль: {this.props.navigation.state.params.controllersInfo[0].password}</Text>
-      </View>
-    )
+      <TouchableHighlight
+        onPress={this._onPress}
+        underlayColor='#dddddd'>
+        <View>
+          <View style={styles.rowContainer} >
+            {/* <Image style={styles.thumb} source={require('./../../resources/icons/loading.png')} /> */}
+            <View style={styles.textContainer}>
+              <Text style={styles.name} numberOfLines={1}>{item.location}</Text>
+              <Text style={styles.text}>{item.apikey}</Text>              
+              {/* <Text style={styles.text}>логин: {item.login}</Text>
+              <Text style={styles.text}>пароль: {item.password}</Text> */}
+              {/* <Text style={styles.text}>зарегистрировано: {item.registrationtime}</Text> */}
+            </View>
+            <Text style={styles.probeValue}>Уст 0</Text>
+          </View>
+          <View style={styles.separator} />
+        </View>
+      </TouchableHighlight>
+    );
   }
 }
 
-const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    padding: 30,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    backgroundColor: '#2a8ab7'
-  },
-  text: {
-    marginBottom: 20,
-    fontSize: 15,
-    textAlign: 'left'
-  },
-  title: {
-    marginBottom: 20,
-    fontSize: 25,
-    textAlign: 'center'
+  export default class ControllersComponent extends Component<{}> {
+
+    static navigationOptions = {
+      title: 'Объекты'
+    }
+
+    state = {
+      controllers: []
+    }
+
+    async componentDidMount() {
+      const controllers = await ajax.getControllersInfo();
+      this.setState({ controllers });
+    }
+
+    _keyExtractor = (item, index) => item.id;
+  
+    _renderItem = ({item, index}) => (
+      <ListItem
+        item={item}
+        index={index}
+        onPressItem={this._onPressItem}
+      />
+    );
+  
+    _onPressItem = (index) => {
+      this.props.navigation.push(
+        'Probes',
+        {
+          title: this.state.controllers[index].location,
+          controllersApiKey: this.state.controllers[index].apikey,
+        }
+      );
+    };
+  
+    render() {
+      return (
+        <FlatList
+          data={this.state.controllers}
+          keyExtractor={this._keyExtractor}
+          renderItem={this._renderItem}
+          showsVerticalScrollIndicator={false}
+        />
+      );
+    }
   }
 
-});
+  const styles = StyleSheet.create({
+    rowContainer: {
+      flexDirection: 'row',
+      padding: 10
+    },
+    thumb: {
+      width: 40,
+      height: 40,
+      marginRight: 10
+    },
+    textContainer: {
+      flex: 1
+    },
+    separator: {
+      height: 1,
+      backgroundColor: '#dddddd'
+    },
+    name: {
+      fontSize: 25,
+      fontWeight: 'bold',
+      color: '#48BBEC'
+    },
+    givenName: {
+      color: 'green'
+    },
+    text: {
+        fontSize: 20,
+        color: '#656565'
+    },
+    probeValue: {
+      fontSize: 25,
+      fontWeight: 'bold',
+      color: '#48BBEC'
+    }
+    
+  });
+

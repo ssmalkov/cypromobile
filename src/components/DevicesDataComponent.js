@@ -9,10 +9,12 @@ import {
   View,
   Text,
   FlatList,
+  Switch
 } from 'react-native';
 import ajax from '../services/FetchProbeHistory';
+import FetchDeviceData from '../services/FetchDeviceData';
 import Helpers from '../services/Helpers';
-import { LineChart, Grid } from 'react-native-svg-charts';
+import { LineChart, BarChart, Grid, XAxis } from 'react-native-svg-charts';
 
 export default class DevicesDataComponent extends Component<{}> {
 
@@ -21,20 +23,50 @@ export default class DevicesDataComponent extends Component<{}> {
     });
 
   state = {
-    probeHistory: []
+    probeHistory: [],
+    currentvalue: this.props.navigation.state.params.devicesData.lastDataEntryValue,
+    isSwitchOn: false
   }
+
+
 
   async componentDidMount() {
     const probeHistory = await ajax.getProbeHistory('e8639832111cffa939ed53e765ecb17d', this.props.navigation.state.params.devicesData.name);
     this.setState({ probeHistory });
+
+    console.log(this.state.currentvalue);
+
+    const currentValue = await FetchDeviceData.getCurrentValue('e8639832111cffa939ed53e765ecb17d', this.props.navigation.state.params.devicesData.name);
+    
+    switch (currentValue.value) {
+      case 'on':
+        this.state.isSwitchOn = true;
+        break;
+      case 'off':
+        this.state.isSwitchOn = false;
+        break;
+      default:
+        break;
+    }
+
+    console.log(this.state.isSwitchOn);
+
+  }
+
+
+
+  _toggleSwitch = (isSwitchOn) => {
+    //this.state.isSwitchOn => this.setState({ isSwitchOn })
+    console.log('I am in ' + this.state.isSwitchOn) 
+    this.setState({isSwitchOn})
+    console.log('I was toggled to ' + isSwitchOn) 
   }
 
   render() {
 
-    const data = [ 50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80 ]
-    const probeHistory = this.state.probeHistory;
-    const chartData = this.state.probeHistory.map((data) => {
-      return (data.value)
+    const probeHistory = this.state.probeHistory.slice(1).slice(-200);
+    const chartData = this.state.probeHistory.slice(1).slice(-200).map((data) => {
+      return ( data.value )
     })
 
     return (
@@ -42,20 +74,31 @@ export default class DevicesDataComponent extends Component<{}> {
         <View>
           {/* <Image style={styles.image} source={require('./../../resources/icons/loading.png')} /> */}
           <LineChart
-                style={styles.image}
+                style={{ height: 200 }}
                 data={ chartData }
                 svg={{ stroke: 'rgb(134, 65, 244)' }}
                 contentInset={{ top: 20, bottom: 20 }}
             >
                 <Grid/>
             </LineChart>
-          {console.log(chartData)}
+          {/* <XAxis
+            style={{ marginHorizontal: -10 }}
+            data={chartData}
+            formatLabel={(value, index) => index}
+            contentInset={{ left: 10, right: 10 }}
+            svg={{ fontSize: 10, fill: 'black' }}
+          /> */}
+          {/* {console.log(chartData)} */}
           <View style={styles.heading}>
             <View style={styles.probeName}>
               <Text style={styles.probeNameText}>{this.props.navigation.state.params.devicesData.humanName}({probeHistory.length})</Text>
             </View>
             <View style={styles.probeValue}>
               <Text style={styles.probeValueText}>{this.props.navigation.state.params.devicesData.lastDataEntryValue}</Text>
+              <Switch
+                onValueChange={isSwitchOn => this._toggleSwitch(isSwitchOn)}
+                value={this.state.isSwitchOn}
+              />
             </View>
             {/* <View style={styles.separator}/> */}
           </View>

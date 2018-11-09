@@ -115,7 +115,7 @@ module.exports = Object.freeze([
 		parentDeviceId: "8",
 		parentDeviceType: "Smoke",
 		probeType: "Smoke",
-		humanName: "Что за удельная кнопка на датчике дыма?",
+		humanName: "Что за кнопка на датчике дыма?",
 		place: "Кухня",
 		order: 0,
 		groups: ['system']
@@ -151,7 +151,7 @@ module.exports = Object.freeze([
 		humanName: "Протечка",
 		place: "Санузел",
 		order: 0,
-		groups: ['system','security','water']
+		groups: ['security','water']
 	},
 	{
 		name: "ZWayVDev_zway_9-0-113-5-2-A",
@@ -218,5 +218,27 @@ module.exports = Object.freeze([
 		place: "Зал",
 		order: 8,
 		groups: ['control','electricity']
-	}
+	},
+	{
+		name: "ZWayVDev_zway_20-0-48-6",
+		givenName: "Shenzhen Neo Electronics Co., Ltd Water (#20)",
+		parentDeviceId: "20",
+		parentDeviceType: "Water",
+		probeType: "Water",
+		humanName: "Протечка",
+		place: "Санузел",
+		order: 0,
+		groups: ['security','water']
+	},
+	{
+		name: "default",
+		givenName: "default",
+		parentDeviceId: "9999",
+		parentDeviceType: "Нет родительского устр",
+		probeType: "none",
+		humanName: "Имя не задано",
+		place: "Место не задано",
+		order: 9999,
+		groups: ['security']
+	},
 ]);

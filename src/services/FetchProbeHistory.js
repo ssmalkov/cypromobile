@@ -49,8 +49,6 @@ export default {
 
 function _convertValuesToInt(valuesFromProbes) {
 
-  let convertedToIntData = [];
-
   for (let i = valuesFromProbes.length - 1; i >= 0; i--) {
 
     switch (valuesFromProbes[i].value) {

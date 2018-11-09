@@ -6,7 +6,7 @@ import devicesExtraData from '../data/Devices';
 import Helpers from './Helpers';
 
 export default {
-    async getDevicesInfo() {
+    async getDevicesInfo(controllerApiKey) {
       //Получаем список устройств
       //get devices /api/v1/device/{id}/get/all последние из базы
 
@@ -26,7 +26,7 @@ export default {
       //   },
       // ]
 
-      const controllerApiKey = 'e8639832111cffa939ed53e765ecb17d';
+      //const controllerApiKey = 'e8639832111cffa939ed53e765ecb17d';
       const URL = 'http://' + config.server + ':' + config.port + '/core/api/v1/device/' + controllerApiKey + '/get/all';
 
         try {
@@ -117,15 +117,31 @@ function addExtraData(devicesToImprove) {
 
     for (let i = 0; i < devicesToImprove.length; i++){
 
-      const extraData = devicesExtraData.find(d => d.name === devicesToImprove[i].name);
-      devicesToImprove[i].parentDeviceId = extraData.parentDeviceId;
-      devicesToImprove[i].parentDeviceType = extraData.parentDeviceType;
-      devicesToImprove[i].probeType = extraData.probeType;
-      devicesToImprove[i].humanName = extraData.humanName;
-      devicesToImprove[i].place = extraData.place;
-      devicesToImprove[i].order = extraData.order;
-      devicesToImprove[i].groups = extraData.groups;
-      devicesToImprove[i].parentDeviceType = extraData.parentDeviceType;
+      let extraData = devicesExtraData.find(d => d.name === devicesToImprove[i].name);
+      if (extraData != null) {
+
+        devicesToImprove[i].parentDeviceId = extraData.parentDeviceId;
+        devicesToImprove[i].parentDeviceType = extraData.parentDeviceType;
+        devicesToImprove[i].probeType = extraData.probeType;
+        devicesToImprove[i].humanName = extraData.humanName;
+        devicesToImprove[i].place = extraData.place;
+        devicesToImprove[i].order = extraData.order;
+        devicesToImprove[i].groups = extraData.groups;
+        devicesToImprove[i].parentDeviceType = extraData.parentDeviceType;
+
+      } else {
+
+        extraData = devicesExtraData.find(d => d.name === 'default');
+        devicesToImprove[i].parentDeviceId = extraData.parentDeviceId;
+        devicesToImprove[i].parentDeviceType = extraData.parentDeviceType;
+        devicesToImprove[i].probeType = extraData.probeType;
+        devicesToImprove[i].humanName = devicesToImprove[i].name;
+        devicesToImprove[i].place = extraData.place;
+        devicesToImprove[i].order = extraData.order;
+        devicesToImprove[i].groups = extraData.groups;
+        devicesToImprove[i].parentDeviceType = extraData.parentDeviceType;
+
+      }
 
     }
 

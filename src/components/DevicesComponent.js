@@ -1,4 +1,4 @@
-// DashboardComponent.js
+// DevicesComponent.js
 
 'use strict';
 import React, { Component } from 'react';
@@ -11,6 +11,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 import ajax from '../services/FetchDevices';
+import config from '../config';
 import * as Components from './';
 
 class ListItem extends React.PureComponent {
@@ -62,7 +63,8 @@ class ListItem extends React.PureComponent {
     }
 
     async componentDidMount() {
-      const devices = await ajax.getDevicesInfo();
+      const apikey = this.props.navigation.state.params.controllersApiKey;
+      const devices = await ajax.getDevicesInfo(apikey);
       this.setState({ devices });
     }
 

@@ -1,0 +1,4 @@
+module.exports = Object.freeze ({
+    server: '99.99.99.99', // API server IP
+    port: '9999, // API server IP
+});

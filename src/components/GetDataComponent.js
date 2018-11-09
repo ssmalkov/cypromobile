@@ -92,6 +92,7 @@ export default class GetDataComponent extends Component {
   handleControllersRequest() {
     Services.FetchControllers.getControllersInfo()
       .then((response) => {
+        // console.log(response);
         if (!response) {
           this.setState({
             error: 'Неверный запрос или контроллер!'
@@ -178,7 +179,7 @@ export default class GetDataComponent extends Component {
         </TouchableHighlight>
         {showErr}
 
-        <TouchableHighlight
+        {/* <TouchableHighlight
           style={styles.button}
           underlayColor="white"
           onPress={this.handleDevicesRequest}
@@ -188,7 +189,7 @@ export default class GetDataComponent extends Component {
             Сигналы
               </Text>
         </TouchableHighlight>
-        {showErr}
+        {showErr} */}
 
         {/* <TextInput
                     onSubmitEditing={this.onSubmit}
