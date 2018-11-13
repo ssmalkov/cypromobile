@@ -16,23 +16,23 @@ import * as Components from './';
 
 import {Constants, Notifications, Permissions} from 'expo';
 
-async function getToken() {
-  // Remote notifications do not work in simulators, only on device
-  if (!Constants.isDevice) {
-    return;
-  }
-  let { status } = await Permissions.askAsync(
-    Permissions.NOTIFICATIONS,
-  );
-  if (status !== 'granted') {
-    return;
-  }
+// async function getToken() {
+//   // Remote notifications do not work in simulators, only on device
+//   if (!Constants.isDevice) {
+//     return;
+//   }
+//   let { status } = await Permissions.askAsync(
+//     Permissions.NOTIFICATIONS,
+//   );
+//   if (status !== 'granted') {
+//     return;
+//   }
 
-  console.log('PushStatus: ', status);
+//   console.log('PushStatus: ', status);
 
-  let value = await Notifications.getExpoPushTokenAsync();
-  console.log('Our token', value);
-}
+//   let value = await Notifications.getExpoPushTokenAsync();
+//   console.log('Our token', value);
+// }
 
 export default class GetDataComponent extends Component {
   constructor(props) {
@@ -41,53 +41,53 @@ export default class GetDataComponent extends Component {
       error: false
     }
     this.handleControllersRequest = this.handleControllersRequest.bind(this);
-    this.handleDevicesRequest = this.handleDevicesRequest.bind(this);
+    //this.handleDevicesRequest = this.handleDevicesRequest.bind(this);
   }
 
   static navigationOptions = {
     header: null
   }
 
-  handlePushLocal(){
-    const schedulingOptions = {
-      time: (new Date()).getTime() + 3000
-    }
+  // handlePushLocal(){
+  //   const schedulingOptions = {
+  //     time: (new Date()).getTime() + 3000
+  //   }
 
-    const localNotification = {
-      // "to": "<TOKEN>",
-      // "title": "Notification",
-      // "body": "Remote notification body",
-      // "data": { "value": "Hello remote world!" }
+  //   const localNotification = {
+  //     // "to": "<TOKEN>",
+  //     // "title": "Notification",
+  //     // "body": "Remote notification body",
+  //     // "data": { "value": "Hello remote world!" }
 
-          title: 'done',
-          body: Services.Helpers.U2Gtime(schedulingOptions.time),
-          data: { "value": "Hello remote world!" }
-
-
+  //         title: 'done',
+  //         body: Services.Helpers.U2Gtime(schedulingOptions.time),
+  //         data: { "value": "Hello remote world!" }
 
 
-        };
+
+
+  //       };
     
-        // Notifications show only when app is not active.
-        // (ie. another app being used or device's screen is locked)
-        Notifications.scheduleLocalNotificationAsync(
-          localNotification, schedulingOptions
-        );
-  }
+  //       // Notifications show only when app is not active.
+  //       // (ie. another app being used or device's screen is locked)
+  //       Notifications.scheduleLocalNotificationAsync(
+  //         localNotification, schedulingOptions
+  //       );
+  // }
 
-  componentDidMount() {
-    getToken();
-    this.listener = Notifications.addListener(this.handleNotification);
-  }
+  // componentDidMount() {
+  //   getToken();
+  //   this.listener = Notifications.addListener(this.handleNotification);
+  // }
 
-  componentWillUnmount() {
-    this.listener && this.listener.remove();
-  }
+  // componentWillUnmount() {
+  //   this.listener && this.listener.remove();
+  // }
 
-  handleNotification = ({ origin, data }) => {
-    console.log(`Push notification ${origin} with data:`, JSON.stringify(data));
-    alert(data.value);
-  };
+  // handleNotification = ({ origin, data }) => {
+  //   console.log(`Push notification ${origin} with data:`, JSON.stringify(data));
+  //   alert(data.value);
+  // };
 
   handleControllersRequest() {
     Services.FetchControllers.getControllersInfo()
@@ -110,9 +110,9 @@ export default class GetDataComponent extends Component {
       });
   }
 
-  handleDevicesRequest() {
-    this.props.navigation.push('Probes');
-  }
+  // handleDevicesRequest() {
+  //   this.props.navigation.push('Probes');
+  // }
 
 
 //-------------Notifications

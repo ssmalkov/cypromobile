@@ -6,7 +6,7 @@ import devicesExtraData from '../data/Devices';
 import Helpers from './Helpers';
 
 export default {
-    async getDevicesInfo(controllerApiKey) {
+    async getDevicesInfo(controllerApiKey, onlyCount) {
       //Получаем список устройств
       //get devices /api/v1/device/{id}/get/all последние из базы
 
@@ -27,82 +27,85 @@ export default {
       // ]
 
       //const controllerApiKey = 'e8639832111cffa939ed53e765ecb17d';
-      const URL = 'http://' + config.server + ':' + config.port + '/core/api/v1/device/' + controllerApiKey + '/get/all';
+    const URL = 'http://' + config.server + ':' + config.port + '/core/api/v1/device/' + controllerApiKey + '/get/all';
 
-        try {
+    try {
 
-                let response = await fetch(URL);
-                let json = response && await response.json();
+      let response = await fetch(URL);
+      let json = response && await response.json();
 
-                let devices = json && await _removeFakeDevices(json);
-                devices = devices && await _makeFormatedDevices(devices);
-                devices = devices && addExtraData(devices);
-                devices = devices && devices
-                  .filter(p => !p.groups.includes('system'))
-                  .sort(function(a, b) { return a.order - b.order;})
-                  ;
+      let devices = json && await _removeFakeDevices(json)
 
-                for (let i = devices.length - 1; i >= 0; i--)
-                {
+      devices = devices && await _makeFormatedDevices(devices);
+      devices = devices && addExtraData(devices);
+      devices = devices && devices
+        .filter(p => !p.groups.includes('system'))
+        .sort(function (a, b) { return a.order - b.order; })
+        ;
 
-                    let currentValue = await FetchDeviceData.getCurrentValue(controllerApiKey, devices[i].name);
+      if (onlyCount == true) {
+        return devices.length;
+      }
 
-                    if (_checkIfOutdated(currentValue.time)){
-                      devices[i].lastDataEntryTime = Helpers.U2Gtime(currentValue.time) + ' Данные устарели!';
-                    } else {
-                      devices[i].lastDataEntryTime = Helpers.U2Gtime(currentValue.time);
-                    }
+      for (let i = devices.length - 1; i >= 0; i--) {
 
-                    devices[i].lastDataEntryValue = currentValue.value;
+        let currentValue = await FetchDeviceData.getCurrentValue(controllerApiKey, devices[i].name);
 
-                }
-
-                return devices;
-
-            }
-        catch(err) {
-            console.log(err)
+        if (_checkIfOutdated(currentValue.time)) {
+          devices[i].lastDataEntryTime = Helpers.U2Gtime(currentValue.time) + ' Данные устарели!';
+        } else {
+          devices[i].lastDataEntryTime = Helpers.U2Gtime(currentValue.time);
         }
 
-    }
-}
+        devices[i].lastDataEntryValue = currentValue.value;
 
-function _removeFakeDevices(devices)
-{
-            //Убираем пустые системные устройства
-            const nonFakeAttribute = 'WayVDev_zway_';
+      }
+      console.log(devices)
 
-            return devices.filter(d => d.name && d.name.includes(nonFakeAttribute));
-
-}
-
-function _makeFormatedDevices(rawDevices)
-{
-
-    for (let i = rawDevices.length - 1; i >= 0; i--) 
-    {
-      rawDevices[i].modificationTime = Helpers.U2Gtime(rawDevices[i].modificationTime);
-      rawDevices[i].lastDataEntryTime = '';
-      rawDevices[i].lastDataEntryValue = '';
-      rawDevices[i].isManagable = checkIfDeviceIsManagable(rawDevices[i]);
+      return devices;
     }
 
-    return rawDevices;
+    catch (err) {
+      console.log(err)
+
+    }
+
+  }
 }
 
-function checkIfDeviceIsManagable(device)
-{
+function _removeFakeDevices(devices) {
+  //Убираем пустые системные устройства
+  const nonFakeAttribute = 'WayVDev_zway_';
+
+  return devices.filter(d => d.name && d.name.includes(nonFakeAttribute));
+
+}
+
+function _makeFormatedDevices(rawDevices) {
+
+  for (let i = rawDevices.length - 1; i >= 0; i--) {
+    rawDevices[i].modificationTime = Helpers.U2Gtime(rawDevices[i].modificationTime);
+    rawDevices[i].lastDataEntryTime = '';
+    rawDevices[i].lastDataEntryValue = '';
+    rawDevices[i].isManagable = checkIfDeviceIsManagable(rawDevices[i]);
+  }
+
+  return rawDevices;
+}
+
+function checkIfDeviceIsManagable(device) {
   //проверка на managable
-    
-    let deviceIsManagable = device.name === 'ZWayVDev_zway_12-0-37' ? true : false;
-  
+
+  // let deviceIsManagable = device.name === 'ZWayVDev_zway_12-0-37' ? true : false;
+
+  let deviceIsManagable = device.isManagable == true ? true : false;
+
   return deviceIsManagable;
 }
 
-function _checkIfOutdated(unixTime)
-{
+function _checkIfOutdated(unixTime) {
 
-  let now = new Date ();
+  let now = new Date();
   const outdateHours = 12;
 
   unixTime * 1000;
@@ -115,7 +118,7 @@ function addExtraData(devicesToImprove) {
 
   if (devicesToImprove != null) {
 
-    for (let i = 0; i < devicesToImprove.length; i++){
+    for (let i = 0; i < devicesToImprove.length; i++) {
 
       let extraData = devicesExtraData.find(d => d.name === devicesToImprove[i].name);
       if (extraData != null) {
@@ -128,6 +131,7 @@ function addExtraData(devicesToImprove) {
         devicesToImprove[i].order = extraData.order;
         devicesToImprove[i].groups = extraData.groups;
         devicesToImprove[i].parentDeviceType = extraData.parentDeviceType;
+        devicesToImprove[i].isManagable = extraData.isManagable;
 
       } else {
 

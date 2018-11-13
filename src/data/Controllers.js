@@ -5,7 +5,7 @@ module.exports = Object.freeze([
 	},
 	{
 		"apikey": "4849jdh465hbb34h56ehenk60nc63",
-		"location": "Орбира Земли",
+		"location": "Орбита Земли",
 },
 {
 	"apikey": "e8639832111cffa939ed53e765ecb17d",

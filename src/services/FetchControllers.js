@@ -4,6 +4,7 @@
 import * as config from '../config';
 import extendableControllers from '../data/Controllers';
 import Helpers from './Helpers';
+import FetchDevices from './FetchDevices';
 
 export default {
   async getControllersInfo() {
@@ -23,6 +24,10 @@ export default {
               let response = await fetch(URL);
               let json = response && await response.json();
               let controllers = json && await extendControlersData(json);
+
+              for (let i = 0; i < controllers.length; i++) {
+                controllers[i].numberOfDevices = await FetchDevices.getDevicesInfo(controllers[i].apikey, true);
+              }
 
               return controllers;
           }

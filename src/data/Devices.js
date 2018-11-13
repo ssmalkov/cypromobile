@@ -217,7 +217,8 @@ module.exports = Object.freeze([
 		humanName: "Управляемая розетка",
 		place: "Зал",
 		order: 8,
-		groups: ['control','electricity']
+		groups: ['control','electricity'],
+		isManagable: true
 	},
 	{
 		name: "ZWayVDev_zway_20-0-48-6",
@@ -230,6 +231,118 @@ module.exports = Object.freeze([
 		order: 0,
 		groups: ['security','water']
 	},
+	{
+		name: "ZWayVDev_zway_20-0-48-6",
+		givenName: "Leak_Alarm_Sound_Off",
+		parentDeviceId: "20",
+		parentDeviceType: "WaterAlarm",
+		probeType: "WaterAlarm",
+		humanName: "Протечка, звуковой сигнал",
+		place: "Санузел",
+		order: 1,
+		groups: ['system', 'security', 'water']
+	},
+  {
+    name: "ZWayVDev_zway_20-0-113-5-2-A",
+    givenName: "Leak_Alarm",
+    parentDeviceId: "20",
+		parentDeviceType: "Water",
+		probeType: "Water",
+		humanName: "Протечка",
+		place: "Санузел",
+		order: 0,
+		groups: ['security','water']
+	},
+  {
+    name: "ZWayVDev_zway_20-0-128",
+    givenName: "Leak_Battery",
+		parentDeviceId: "20",
+		parentDeviceType: "WaterAlarm",
+		probeType: "BatteryState",
+		humanName: "Состояние батареи",
+		place: "Санузел",
+		order: 0,
+		groups: ['system']
+  },
+  {
+    name: "ZWayVDev_zway_21-0-113-2-2-A",
+    givenName: "CO2_Alarm",
+		parentDeviceId: "21",
+		arentDeviceType: "CO",
+		probeType: "CO",
+		humanName: "Загазованность",
+		place: "Гараж",
+		order: 4,
+		groups: ['security','environment']
+	},
+  {
+    name: "ZWayVDev_zway_21-0-113-7-3-A",
+    givenName: "CO2_Burglar_Alarm",
+    parentDeviceId: "21",
+		parentDeviceType: "CO",
+		probeType: "Tamper",
+		humanName: "Взлом устройства",
+		place: "Гараж",
+		order: 0,
+		groups: ['system']
+  },
+  {
+    name: "ZWayVDev_zway_21-0-128",
+    givenName: "Vision Security Battery (#21)",
+    parentDeviceId: "21",
+		parentDeviceType: "CO",
+		probeType: "BatteryState",
+		humanName: "Состояние батареи",
+		place: "Гараж",
+		order: 0,
+		groups: ['system']
+	},
+  {
+    name: "ZWayVDev_zway_22-0-48-1",
+    givenName: "Smoke_Alarm",
+		parentDeviceId: "22",
+		parentDeviceType: "Smoke",
+		probeType: "Smoke",
+		humanName: "Дым",
+		place: "Кухня",
+		order: 5,
+		groups: ['security']
+  },
+  {
+    name: "ZWayVDev_zway_22-0-128",
+    givenName: "Vision Security Battery (#22)",
+		parentDeviceId: "22",
+		parentDeviceType: "Smoke",
+		probeType: "BatteryState",
+		humanName: "Состояние батареи",
+		place: "Кухня",
+		order: 0,
+		groups: ['system']
+	},
+  {
+    name: "ZWayVDev_zway_23-0-37",
+    givenName: "Power_Socket",
+    parentDeviceId: "23",
+		parentDeviceType: "PowerSocket",
+		probeType: "PowerSocketSwitch",
+		humanName: "Управляемая розетка",
+		place: "Зал",
+		order: 8,
+		groups: ['control','electricity'],
+		isManagable: true
+  },
+  {
+    name: "ZWayVDev_zway_25-0-37",
+		givenName: "Valve",
+		parentDeviceId: "25",
+		parentDeviceType: "Valve",
+		probeType: "Valve Switch",
+		humanName: "Водяной кран",
+		place: "Санузел",
+		order: 7,
+		groups: ['water','control'],
+		isManagable: true
+  },
 	{
 		name: "default",
 		givenName: "default",

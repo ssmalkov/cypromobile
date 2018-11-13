@@ -95,10 +95,15 @@ export default class DevicesDataComponent extends Component<{}> {
             </View>
             <View style={styles.probeValue}>
               <Text style={styles.probeValueText}>{this.props.navigation.state.params.devicesData.lastDataEntryValue}</Text>
-              <Switch
-                onValueChange={isSwitchOn => this._toggleSwitch(isSwitchOn)}
-                value={this.state.isSwitchOn}
-              />
+              {
+                this.props.navigation.state.params.devicesData.isManagable
+                  ? (<Switch
+                    onValueChange={isSwitchOn => this._toggleSwitch(isSwitchOn)}
+                    value={this.state.isSwitchOn}
+                  />)
+                  : null
+              }
+              
             </View>
             {/* <View style={styles.separator}/> */}
           </View>

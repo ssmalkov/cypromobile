@@ -29,13 +29,13 @@ class ListItem extends React.PureComponent {
           <View style={styles.rowContainer} >
             {/* <Image style={styles.thumb} source={require('./../../resources/icons/loading.png')} /> */}
             <View style={styles.textContainer}>
-              <Text style={styles.name} numberOfLines={1}>{item.location}</Text>
-              <Text style={styles.text}>{item.apikey}</Text>              
+              <Text style={styles.name} >{item.location}</Text>
+              {/* <Text style={styles.text}>{item.apikey}</Text>               */}
               {/* <Text style={styles.text}>логин: {item.login}</Text>
               <Text style={styles.text}>пароль: {item.password}</Text> */}
               {/* <Text style={styles.text}>зарегистрировано: {item.registrationtime}</Text> */}
             </View>
-            <Text style={styles.probeValue}>Уст 0</Text>
+            <Text style={styles.probeValue}>{item.numberOfDevices}</Text>
           </View>
           <View style={styles.separator} />
         </View>
@@ -95,11 +95,6 @@ class ListItem extends React.PureComponent {
     rowContainer: {
       flexDirection: 'row',
       padding: 10
-    },
-    thumb: {
-      width: 40,
-      height: 40,
-      marginRight: 10
     },
     textContainer: {
       flex: 1
